@@ -1,0 +1,94 @@
+<div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h1 style="margin-left: 30px;">Arrecife</h1>
+  
+      <ul class="sidebar-menu">
+        <li><a routerLink="/productos">Productos</a></li>
+        <li><a routerLink="/empleados">Empleados</a></li>
+        <li><a routerLink="/movimientos">Movimientos</a></li>
+      </ul>
+    </div>
+    
+    <!-- Contenido principal -->
+    <div class="main-content">
+      <!-- Botón Agregar -->
+      <div style="margin: 50px;">
+        <button class="add" (click)="toggleFormulario()">Agregar</button>
+      </div>
+  
+      <!-- Formulario para agregar/editar movimiento de inventario -->
+      <div *ngIf="mostrarFormulario" class="formulario">
+        <h2>{{ modoEdicion ? 'Editar Movimiento de Inventario' : 'Agregar Movimiento de Inventario' }}</h2>
+        <form (ngSubmit)="guardarMovimiento()">
+          <div class="form-group">
+            <label for="producto">Producto:</label>
+            <select [(ngModel)]="movimiento.id_producto" name="producto" id="producto" required>
+              <option *ngFor="let producto of productos" [value]="producto.ID_Producto">{{ producto.Nombre }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="empleado">Empleado:</label>
+            <select [(ngModel)]="movimiento.id_empleado" name="empleado" id="empleado" required>
+              <option *ngFor="let empleado of empleados" [value]="empleado.ID_Empleado">{{ empleado.Nombre }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="tipoMovimiento">Tipo de Movimiento:</label>
+            <input type="text" [(ngModel)]="movimiento.Tipo_Movimiento" name="tipoMovimiento" id="tipoMovimiento" required>
+          </div>
+          <div class="form-group">
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" [(ngModel)]="movimiento.cantidad" name="cantidad" id="cantidad" required>
+          </div>
+          <div class="form-group">
+            <label for="fecha">Fecha de Movimiento:</label>
+            <input type="date" [(ngModel)]="movimiento.fecha_movimiento" name="fecha" id="fecha" required>
+          </div>
+          <div class="form-group">
+            <label for="notas">Notas:</label>
+            <textarea [(ngModel)]="movimiento.notas" name="notas" id="notas" rows="4"></textarea>
+          </div>
+          <div class="botones">
+            <button type="submit" class="btn btn-primary">{{ modoEdicion ? 'Guardar Cambios' : 'Guardar' }}</button>
+            <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+  
+      <!-- Tabla de movimientos de inventario -->
+      <div style="margin: 50px;" *ngIf="!mostrarFormulario">
+        <h2>Lista de Movimientos de Inventario</h2>
+        <table class="movimiento-table">
+          <thead>
+            <tr>
+              <th>ID Movimiento</th>
+              <th>Producto</th>
+              <th>Empleado</th>
+              <th>Tipo de Movimiento</th>
+              <th>Cantidad</th>
+              <th>Fecha de Movimiento</th>
+              <th>Notas</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let movimiento of movimientos">
+              <td>{{ movimiento.ID_Movimiento }}</td>
+              <td>{{ getProductoNombre(movimiento.ID_Producto) }}</td>
+              <td>{{ getEmpleadoNombre(movimiento.ID_Empleado) }}</td>
+              <td>{{ movimiento.Tipo_Movimiento }}</td>
+              <td>{{ movimiento.Cantidad }}</td>
+              <td>{{ movimiento.Fecha_Movimiento | date }}</td>
+              <td>{{ movimiento.Notas }}</td>
+              <td>
+                <button class="edit" (click)="editarMovimiento(movimiento)">Editar</button>
+                <button class="delete" (click)="eliminarMovimiento(movimiento)">Eliminar</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+

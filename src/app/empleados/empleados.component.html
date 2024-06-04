@@ -1,0 +1,71 @@
+<div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h1 style="margin-left: 30px;">Arrecife</h1>
+  
+      <ul class="sidebar-menu">
+        <li><a routerLink="/productos">Productos</a></li>
+        <li><a routerLink="/empleados">Empleados</a></li>
+        <li><a routerLink="/movimientos">Movimientos</a></li>
+      </ul>
+    </div>
+    
+    <!-- Contenido principal -->
+    <div class="main-content">
+      <!-- Botón Agregar -->
+      <div style="margin: 50px;">
+        <button class="add" (click)="toggleFormulario()">Agregar</button>
+      </div>
+  
+      <!-- Formulario para agregar/editar empleados -->
+      <div *ngIf="mostrarFormulario" class="formulario">
+        <h2>{{ modoEdicion ? 'Editar Empleado' : 'Agregar Empleado' }}</h2>
+        <form (ngSubmit)="guardarEmpleado()">
+          <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" [(ngModel)]="empleado.nombre" name="nombre" id="nombre" required>
+          </div>
+          <div class="form-group">
+            <label for="posicion">Posición:</label>
+            <input type="text" [(ngModel)]="empleado.posicion" name="posicion" id="posicion" required>
+          </div>
+          <div class="form-group">
+            <label for="contacto">Contacto:</label>
+            <input type="text" [(ngModel)]="empleado.contacto" name="contacto" id="contacto" required>
+          </div>
+          <div class="botones">
+            <button type="submit" class="btn btn-primary">{{ modoEdicion ? 'Guardar Cambios' : 'Guardar' }}</button>
+            <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+  
+      <!-- Tabla de empleados -->
+      <div style="margin: 50px;" *ngIf="!mostrarFormulario">
+        <h2>Lista de Empleados</h2>
+        <table class="employee-table">
+          <thead>
+            <tr>
+              <th>ID_Empleado</th>
+              <th>Nombre</th>
+              <th>Posición</th>
+              <th>Contacto</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let empleado of empleados">
+              <td>{{ empleado.ID_Empleado }}</td>
+              <td>{{ empleado.Nombre }}</td>
+              <td>{{ empleado.Posicion }}</td>
+              <td>{{ empleado.Contacto }}</td>
+              <td class="employee-actions">
+                <button class="edit" (click)="editarEmpleado(empleado)">Editar</button>
+                <button class="delete" (click)="eliminarEmpleado(empleado)">Eliminar</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>
